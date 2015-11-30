@@ -77,22 +77,18 @@ public class MyAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        DataBean dataBean = mDatas.get(position);
+        final DataBean dataBean = mDatas.get(position);
         if (dataBean != null) {
             holder.textTitle.setText(dataBean.title);
             holder.textDesc.setText(dataBean.desc);
 
 
-            // 根据isSelected来设置checkbox的选中状况
+            // 根据isSelected来设置checkbox的显示状况
             if (flage) {
                 holder.checkboxOperateData.setVisibility(View.VISIBLE);
             } else {
                 holder.checkboxOperateData.setVisibility(View.GONE);
             }
-
-            holder.checkboxOperateData.setTag(position);
-
-            addListener(holder, dataBean.id);//添加事件响应
 
             if (selected.containsKey(position))
 
@@ -100,42 +96,21 @@ public class MyAdapter extends BaseAdapter {
             else
                 holder.checkboxOperateData.setChecked(false);
 
-        }
+            holder.checkboxOperateData.setChecked(dataBean.isCheck);
 
-
-        return convertView;
-    }
-
-    private void addListener(ViewHolder holder, final String id) {
-
-        holder.checkboxOperateData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                if (isChecked) {
-                    if (!selected.containsKey(buttonView.getTag())) {
-                        selected.put((Integer) buttonView.getTag(), id);
+            //注意这里设置的不是onCheckedChangListener，还是值得思考一下的
+            holder.checkboxOperateData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (dataBean.isCheck) {
+                        dataBean.isCheck = false;
+                    } else {
+                        dataBean.isCheck = true;
                     }
-
-                } else {
-                    selected.remove((Integer) buttonView.getTag());
                 }
-            }
-
-        });
-    }
-
-    public List<String> getIds() {
-
-        Collection<String> ids = selected.values();
-        dataIds.clear();
-
-        for (String id : ids) {
-            dataIds.add(id);
+            });
         }
-
-        return dataIds;
+        return convertView;
     }
 
     class ViewHolder {

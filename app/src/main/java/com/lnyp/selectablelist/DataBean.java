@@ -9,6 +9,8 @@ public class DataBean {
 
     public String desc;
 
+    public boolean isCheck;
+
     public DataBean(String id, String title, String desc) {
         this.id = id;
         this.title = title;

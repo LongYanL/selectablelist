@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MyAdapter mAdapter;
 
-    public boolean flage = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,22 +29,22 @@ public class MainActivity extends AppCompatActivity {
 
         mDatas = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
+
             DataBean dataBean = new DataBean("" + i, "上邪", "山无棱，天地合，乃敢与君绝");
-            mDatas.add(dataBean);
             mDatas.add(dataBean);
         }
 
         mAdapter = new MyAdapter(this, mDatas);
         listView.setAdapter(mAdapter);
 
-
     }
 
     public void btnEditList(View view) {
+
         mAdapter.flage = !mAdapter.flage;
 
         if (mAdapter.flage) {
-            button.setText("取消编辑");
+            button.setText("取消");
         } else {
             button.setText("编辑");
         }
@@ -56,22 +54,53 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnSelectAllList(View view) {
         if (mAdapter.flage) {
+            for (int i = 0; i < mDatas.size(); i++) {
+                mDatas.get(i).isCheck = true;
+            }
 
+            mAdapter.notifyDataSetChanged();
         }
     }
 
     public void btnNoList(View view) {
 
         if (mAdapter.flage) {
+            for (int i = 0; i < mDatas.size(); i++) {
+                mDatas.get(i).isCheck = false;
+            }
 
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void btnfanxuanList(View view) {
+        if (mAdapter.flage) {
+            for (int i = 0; i < mDatas.size(); i++) {
+                if (mDatas.get(i).isCheck) {
+                    mDatas.get(i).isCheck = false;
+                } else {
+                    mDatas.get(i).isCheck = true;
+                }
+            }
+
+            mAdapter.notifyDataSetChanged();
         }
     }
 
     public void btnOperateList(View view) {
-        if (mAdapter.flage) {
-            List<String> ids = mAdapter.getIds();
 
+        List<String> ids = new ArrayList<>();
+
+        if (mAdapter.flage) {
+
+            for (int i = 0; i < mDatas.size(); i++) {
+                if (mDatas.get(i).isCheck) {
+                    ids.add(mDatas.get(i).id);
+                }
+            }
             Log.e("TAG", ids.toString());
         }
     }
+
+
 }
